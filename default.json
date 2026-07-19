@@ -22,6 +22,11 @@
   "osvVulnerabilityAlerts": false,
   "packageRules": [
     {
+      "description": "Type ALL dependency updates as 'deps' so release-please files them under Dependencies, not Bug Fixes. This overrides config:recommended's bundled :semanticPrefixFixDepsChoreOthers, which otherwise types dependency updates as 'fix'. Must stay before the github-actions rule so ci(deps) still wins for actions.",
+      "matchPackageNames": ["*"],
+      "semanticCommitType": "deps"
+    },
+    {
       "description": "Auto-merge low-risk third-party updates once CI passes.",
       "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
       "automerge": true
