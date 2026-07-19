@@ -1,0 +1,44 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Org-wide Renovate policy for all newstack-cloud repos, independent of any product (Bluelink, Celerity, ...). Extended via github>newstack-cloud/renovate-config. Renovate owns version updates; Dependabot is kept for security updates only. Product-specific rules (e.g. the Bluelink release cascade) live in product-scoped presets, NOT here.",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits"
+  ],
+  "timezone": "Etc/UTC",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies"],
+  "rebaseWhen": "conflicted",
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 0,
+  "semanticCommitType": "deps",
+  "semanticCommitScope": null,
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
+  "platformAutomerge": true,
+  "vulnerabilityAlerts": {
+    "description": "Security PRs are handled by Dependabot, not Renovate — avoid duplicate alerts.",
+    "enabled": false
+  },
+  "osvVulnerabilityAlerts": false,
+  "packageRules": [
+    {
+      "description": "Auto-merge low-risk third-party updates once CI passes.",
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+      "automerge": true
+    },
+    {
+      "description": "Hold major updates for manual review.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "addLabels": ["major-update"]
+    },
+    {
+      "description": "GitHub Actions: mirror the existing ci(deps) commit convention.",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps",
+      "automerge": true
+    }
+  ]
+}
